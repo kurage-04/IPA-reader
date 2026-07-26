@@ -184,8 +184,6 @@
     <button class="tab" data-panel="others" role="tab">其他符號 Other</button>
     <button class="tab" data-panel="affricates" role="tab">塞擦音 Affricates</button>
     <button class="tab" data-panel="nonpulmonic" role="tab">非肺部氣流音 Non-pulmonic</button>
-    <button class="tab" data-panel="suprasegmentals" role="tab">上標符號 Suprasegmentals</button>
-    <button class="tab" data-panel="diacritics" role="tab">變音符號 Diacritics</button>
     <div class="tab-spacer"></div>
     <label class="fav-toggle"><input type="checkbox" id="favOnly"> 只顯示已收藏</label>
   </div>
@@ -233,20 +231,6 @@
     <div class="grid-scroll"><div class="flex-cards" id="implosive-grid"></div></div>
     <h2 class="section-title"><span class="dot" style="background:var(--other)"></span>擠喉音 Ejectives（範例）</h2>
     <div class="grid-scroll"><div class="flex-cards" id="ejective-grid"></div></div>
-  </section>
-
-  <!-- SUPRASEGMENTALS -->
-  <section class="panel" id="panel-suprasegmentals">
-    <p class="chart-note">重音、長度、語調群等標示語音「以上」層級特徵的符號。這些符號多半是修飾整個音節或語句，而非單一音素，Wikipedia 上也大多沒有可獨立播放的音檔範例，故此處僅作文字對照參考，不提供播放功能。</p>
-    <div class="legend"><span><i style="background:var(--ink-soft)"></i>僅供參考，不可播放</span></div>
-    <div class="grid-scroll"><div class="flex-cards" id="suprasegmental-grid"></div></div>
-  </section>
-
-  <!-- DIACRITICS -->
-  <section class="panel" id="panel-diacritics">
-    <p class="chart-note">附加在字母上（或下）的變音符號，用來標示送氣、鼻音化、清化等細微發音特徵。同樣因為是組合修飾符號，Wikipedia 上大多沒有獨立音檔，此處僅作文字對照參考。</p>
-    <div class="legend"><span><i style="background:var(--ink-soft)"></i>僅供參考，不可播放</span></div>
-    <div class="grid-scroll"><div class="flex-cards" id="diacritic-grid"></div></div>
   </section>
 </div>
 
@@ -590,7 +574,7 @@ const AUDIO_DATA = {
 const audioCache = {};
 function resolveUrl(fileName){
   if(typeof AUDIO_DATA !== "undefined" && AUDIO_DATA[fileName]){
-    return AUDIO_DATA[fileName]; // 內嵌的 base64 音檔，無需外部檔案
+    return AUDIO_DATA[fileName];
   }
   if(fileName.startsWith("wiki:")){
     return WIKI_BASE + encodeURIComponent(fileName.slice(5));
