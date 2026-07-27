@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>國際音標互動聲音卡 · IPA Sound Cards（單檔獨立版）</title>
+<title>IPA-reader for conlang</title>
 <style>
   :root{
     --paper:#efe9da;
@@ -123,7 +123,7 @@
     background:repeating-linear-gradient(90deg, transparent 0 1px);
     cursor:pointer;
   }
-  .builder-strip.empty::after{content:"點擊上方任一音標卡片，開始組合你的發音序列…";font-size:12.5px;color:var(--ink-soft);}
+  .builder-strip.empty::after{content:attr(data-placeholder);font-size:12.5px;color:var(--ink-soft);}
   .chip{
     display:flex;align-items:center;gap:4px;background:var(--ink);color:var(--paper);
     border-radius:8px;padding:4px 8px;font-size:18px;line-height:1;
@@ -172,64 +172,67 @@
 <div class="wrap">
   <header>
     <div class="title-block">
-      <h1>國際音標互動聲音卡 <span class="mono-tag">[aɪ pʰiː ˈeɪ]</span></h1>
-      <p>點擊任一卡片即可播放發音，並自動加入下方組合工作區；點星號收藏常用音素；把音標排成一串後可整段播放，最多可收藏 20 組自訂發音組合。</p>
+      <h1>IPA-reader for conlang</h1>
+      <p data-i18n="subtitle">點擊任一卡片即可播放發音，並自動加入下方組合工作區；點星號收藏常用音素；把音標排成一串後可整段播放，最多可收藏 20 組自訂發音組合。</p>
     </div>
-    <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="btn" id="langToggle" style="align-self:flex-start;">EN</button>
+      <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
   </header>
 
   <div class="tabs" role="tablist">
-    <button class="tab" data-panel="consonants" aria-selected="true" role="tab">子音 Consonants</button>
-    <button class="tab" data-panel="vowels" role="tab">母音 Vowels</button>
-    <button class="tab" data-panel="others" role="tab">其他符號 Other</button>
-    <button class="tab" data-panel="affricates" role="tab">塞擦音 Affricates</button>
-    <button class="tab" data-panel="nonpulmonic" role="tab">非肺部氣流音 Non-pulmonic</button>
+    <button class="tab" data-panel="consonants" aria-selected="true" role="tab" data-i18n="tab_consonants">子音 Consonants</button>
+    <button class="tab" data-panel="vowels" role="tab" data-i18n="tab_vowels">母音 Vowels</button>
+    <button class="tab" data-panel="others" role="tab" data-i18n="tab_others">其他符號 Other</button>
+    <button class="tab" data-panel="affricates" role="tab" data-i18n="tab_affricates">塞擦音 Affricates</button>
+    <button class="tab" data-panel="nonpulmonic" role="tab" data-i18n="tab_nonpulmonic">非肺部氣流音 Non-pulmonic</button>
     <div class="tab-spacer"></div>
-    <label class="fav-toggle"><input type="checkbox" id="favOnly"> 只顯示已收藏</label>
+    <label class="fav-toggle"><input type="checkbox" id="favOnly"> <span data-i18n="fav_only">只顯示已收藏</span></label>
   </div>
 
   <!-- CONSONANTS -->
   <section class="panel active" id="panel-consonants">
-    <p class="chart-note">依照發音部位（橫向）與發音方式（縱向）排列，左右兩欄分別為「無聲」與「有聲」子音。空白格代表該組合在人類語言中不存在或極罕見。</p>
+    <p class="chart-note" data-i18n="note_consonants">依照發音部位（橫向）與發音方式（縱向）排列，左右兩欄分別為「無聲」與「有聲」子音。空白格代表該組合在人類語言中不存在或極罕見。</p>
     <div class="legend">
-      <span><i style="background:var(--consonant)"></i>子音</span>
-      <span>左側 = 無聲清音　右側 = 有聲濁音</span>
+      <span><i style="background:var(--consonant)"></i><span data-i18n="legend_consonants">子音</span></span>
+      <span data-i18n="legend_voicing">左側 = 無聲清音　右側 = 有聲濁音</span>
     </div>
     <div class="grid-scroll"><div class="grid" id="consonant-grid"></div></div>
   </section>
 
   <!-- VOWELS -->
   <section class="panel" id="panel-vowels">
-    <p class="chart-note">依舌位高低（縱向）與前後位置（橫向）排列，每格左側為不圓唇、右側為圓唇母音。</p>
+    <p class="chart-note" data-i18n="note_vowels">依舌位高低（縱向）與前後位置（橫向）排列，每格左側為不圓唇、右側為圓唇母音。</p>
     <div class="legend">
-      <span><i style="background:var(--vowel)"></i>母音</span>
-      <button class="btn" id="btnDoubleSpeed" style="margin-left:auto;">⏩ 兩倍速播放（不變調）：關閉</button>
+      <span><i style="background:var(--vowel)"></i><span data-i18n="legend_vowels">母音</span></span>
+      <button class="btn" id="btnDoubleSpeed" style="margin-left:auto;"></button>
     </div>
     <div class="grid-scroll"><div class="grid" id="vowel-grid"></div></div>
   </section>
 
   <!-- OTHERS -->
   <section class="panel" id="panel-others">
-    <p class="chart-note">滑動、雙唇化與會厭音等其他符號。</p>
-    <div class="legend"><span><i style="background:var(--other)"></i>其他符號</span></div>
+    <p class="chart-note" data-i18n="note_others">滑動、雙唇化與會厭音等其他符號。</p>
+    <div class="legend"><span><i style="background:var(--other)"></i><span data-i18n="legend_others">其他符號</span></span></div>
     <div class="grid-scroll"><div class="flex-cards" id="other-grid"></div></div>
   </section>
 
   <!-- AFFRICATES -->
   <section class="panel" id="panel-affricates">
-    <p class="chart-note">塞擦音由「塞音＋擦音」組合而成，兩個符號中間以連音符 ͡ 連接，發音時緊密連續。</p>
-    <div class="legend"><span><i style="background:var(--other)"></i>塞擦音</span></div>
+    <p class="chart-note" data-i18n="note_affricates">塞擦音由「塞音＋擦音」組合而成，兩個符號中間以連音符 ͡ 連接，發音時緊密連續。</p>
+    <div class="legend"><span><i style="background:var(--other)"></i><span data-i18n="legend_affricates">塞擦音</span></span></div>
     <div class="grid-scroll"><div class="flex-cards" id="affricate-grid"></div></div>
   </section>
 
   <!-- NON-PULMONIC -->
   <section class="panel" id="panel-nonpulmonic">
-    <p class="chart-note">不靠肺部氣流發音的子音，包含搭嘴音（clicks）、內爆音（implosives）與擠喉音（ejectives）。</p>
-    <div class="legend"><span><i style="background:var(--other)"></i>搭嘴音 Clicks</span></div>
+    <p class="chart-note" data-i18n="note_nonpulmonic">不靠肺部氣流發音的子音，包含搭嘴音（clicks）、內爆音（implosives）與擠喉音（ejectives）。</p>
+    <div class="legend"><span><i style="background:var(--other)"></i><span data-i18n="legend_clicks">搭嘴音 Clicks</span></span></div>
     <div class="grid-scroll"><div class="flex-cards" id="click-grid"></div></div>
-    <h2 class="section-title"><span class="dot" style="background:var(--other)"></span>內爆音 Voiced implosives</h2>
+    <h2 class="section-title"><span class="dot" style="background:var(--other)"></span><span data-i18n="title_implosives">內爆音 Voiced implosives</span></h2>
     <div class="grid-scroll"><div class="flex-cards" id="implosive-grid"></div></div>
-    <h2 class="section-title"><span class="dot" style="background:var(--other)"></span>擠喉音 Ejectives（範例）</h2>
+    <h2 class="section-title"><span class="dot" style="background:var(--other)"></span><span data-i18n="title_ejectives">擠喉音 Ejectives（範例）</span></h2>
     <div class="grid-scroll"><div class="flex-cards" id="ejective-grid"></div></div>
   </section>
 </div>
@@ -238,18 +241,18 @@
 <div class="workspace">
   <div class="ws-inner">
     <div class="ws-top">
-      <span class="ws-label">組合工作區</span>
-      <div class="builder-strip empty" id="builderStrip" title="點擊播放整段組合"></div>
+      <span class="ws-label" data-i18n="ws_label">組合工作區</span>
+      <div class="builder-strip empty" id="builderStrip" data-i18n-title="ws_strip_title" data-i18n-placeholder="ws_placeholder" title="點擊播放整段組合"></div>
       <div class="ws-btns">
-        <button class="btn" id="btnBackspace">⌫ 刪除末尾</button>
-        <button class="btn" id="btnClear">清空</button>
-        <button class="btn primary" id="btnPlayCombo">▶ 播放組合</button>
-        <button class="btn amber" id="btnSaveCombo">＋ 存入暫存區</button>
+        <button class="btn" id="btnBackspace" data-i18n="ws_backspace">⌫ 刪除末尾</button>
+        <button class="btn" id="btnClear" data-i18n="ws_clear">清空</button>
+        <button class="btn primary" id="btnPlayCombo" data-i18n="ws_play">▶ 播放組合</button>
+        <button class="btn amber" id="btnSaveCombo" data-i18n="ws_save">＋ 存入暫存區</button>
       </div>
     </div>
     <div class="ws-tabs">
-      <div class="ws-mini-tab active" data-target="savedPanel">自訂暫存區 <span id="savedCount">(0/20)</span></div>
-      <div class="ws-mini-tab" data-target="favPanel">收藏的音素 <span id="favCount">(0)</span></div>
+      <div class="ws-mini-tab active" data-target="savedPanel"><span data-i18n="ws_saved_tab">自訂暫存區</span> <span id="savedCount">(0/20)</span></div>
+      <div class="ws-mini-tab" data-target="favPanel"><span data-i18n="ws_fav_tab">收藏的音素</span> <span id="favCount">(0)</span></div>
     </div>
     <div class="ws-panel active" id="savedPanel"></div>
     <div class="ws-panel" id="favPanel" style="display:flex;flex-wrap:wrap;gap:8px;padding-top:8px;"></div>
@@ -260,166 +263,282 @@
 const FILE_BASE = "audio/";
 const WIKI_BASE = "https://commons.wikimedia.org/wiki/Special:FilePath/"; // 補充少數本地缺少的音檔，使用維基共享資源的CC授權錄音
 
+// ---------- 中/英介面文字 ----------
+let LANG = "zh";
+const I18N = {
+  zh: {
+    subtitle: "點擊任一卡片即可播放發音，並自動加入下方組合工作區；點星號收藏常用音素；把音標排成一串後可整段播放，最多可收藏 20 組自訂發音組合。",
+    tab_consonants: "子音",
+    tab_vowels: "母音",
+    tab_others: "其他符號",
+    tab_affricates: "塞擦音",
+    tab_nonpulmonic: "非肺部氣流音",
+    fav_only: "只顯示已收藏",
+    note_consonants: "依照發音部位（橫向）與發音方式（縱向）排列，左右兩欄分別為「無聲」與「有聲」子音。空白格代表該組合在人類語言中不存在或極罕見。",
+    legend_consonants: "子音",
+    legend_voicing: "左側 = 無聲清音　右側 = 有聲濁音",
+    note_vowels: "依舌位高低（縱向）與前後位置（橫向）排列，每格左側為不圓唇、右側為圓唇母音。",
+    legend_vowels: "母音",
+    note_others: "滑動、雙唇化與會厭音等其他符號。",
+    legend_others: "其他符號",
+    note_affricates: "塞擦音由「塞音＋擦音」組合而成，兩個符號中間以連音符 ͡ 連接，發音時緊密連續。",
+    legend_affricates: "塞擦音",
+    note_nonpulmonic: "不靠肺部氣流發音的子音，包含搭嘴音（clicks）、內爆音（implosives）與擠喉音（ejectives）。",
+    legend_clicks: "搭嘴音",
+    title_implosives: "內爆音",
+    title_ejectives: "擠喉音（範例）",
+    ws_label: "組合工作區",
+    ws_strip_title: "點擊播放整段組合",
+    ws_placeholder: "點擊上方任一音標卡片，開始組合你的發音序列…",
+    ws_backspace: "⌫ 刪除末尾",
+    ws_clear: "清空",
+    ws_play: "▶ 播放組合",
+    ws_save: "＋ 存入暫存區",
+    ws_saved_tab: "自訂暫存區",
+    ws_fav_tab: "收藏的音素",
+    double_speed_off: "⏩ 兩倍速播放（不變調）：關閉",
+    double_speed_on: "⏩ 兩倍速播放（不變調）：開啟",
+    saved_empty: "尚未儲存任何組合。在上方組合好音標後，點「＋ 存入暫存區」即可保存，最多 20 組。",
+    fav_empty: "尚未收藏任何音素。點卡片右上角的星號即可收藏。",
+    btn_play: "▶ 播放",
+    btn_load: "載入編輯",
+    btn_delete: "刪除",
+    alert_builder_empty: "組合工作區是空的，請先點選音標卡片。",
+    alert_saved_full: "暫存區已滿（20/20），請先刪除一組再儲存。",
+    prompt_name: "為這組發音組合命名（可留空）：",
+    storage_warning: "⚠ 目前環境不支援自動儲存，收藏與暫存區僅在本次瀏覽期間有效。",
+    tts_flag: "語音合成",
+    lang_btn: "EN"
+  },
+  en: {
+    subtitle: "Click any card to hear its sound and add it to the workspace below. Tap the star to favorite a phoneme. Chain symbols together and play the whole sequence — save up to 20 custom combinations.",
+    tab_consonants: "Consonants",
+    tab_vowels: "Vowels",
+    tab_others: "Other",
+    tab_affricates: "Affricates",
+    tab_nonpulmonic: "Non-pulmonic",
+    fav_only: "Favorites only",
+    note_consonants: "Arranged by place of articulation (columns) and manner of articulation (rows). Left = voiceless, right = voiced. Blank cells are judged impossible or not attested in human language.",
+    legend_consonants: "Consonants",
+    legend_voicing: "Left = voiceless　Right = voiced",
+    note_vowels: "Arranged by tongue height (rows) and front/back position (columns). Left of each cell = unrounded, right = rounded.",
+    legend_vowels: "Vowels",
+    note_others: "Clicks, labialized and epiglottal sounds, and other miscellaneous symbols.",
+    legend_others: "Other symbols",
+    note_affricates: "Affricates combine a plosive and a fricative, joined by a tie bar ͡ and pronounced as one continuous sound.",
+    legend_affricates: "Affricates",
+    note_nonpulmonic: "Consonants not produced with pulmonic airflow: clicks, implosives, and ejectives.",
+    legend_clicks: "Clicks",
+    title_implosives: "Voiced implosives",
+    title_ejectives: "Ejectives (examples)",
+    ws_label: "Combination workspace",
+    ws_strip_title: "Click to play the whole sequence",
+    ws_placeholder: "Click any phoneme card above to start building your sequence…",
+    ws_backspace: "⌫ Backspace",
+    ws_clear: "Clear",
+    ws_play: "▶ Play sequence",
+    ws_save: "＋ Save to slot",
+    ws_saved_tab: "Saved combinations",
+    ws_fav_tab: "Favorite phonemes",
+    double_speed_off: "⏩ 2× speed (pitch preserved): Off",
+    double_speed_on: "⏩ 2× speed (pitch preserved): On",
+    saved_empty: "No combinations saved yet. Build a sequence above, then click “＋ Save to slot” — up to 20 slots.",
+    fav_empty: "No favorites yet. Tap the star on a card's corner to favorite it.",
+    btn_play: "▶ Play",
+    btn_load: "Load",
+    btn_delete: "Delete",
+    alert_builder_empty: "The workspace is empty — pick some phoneme cards first.",
+    alert_saved_full: "Storage is full (20/20). Delete a slot before saving another.",
+    prompt_name: "Name this combination (optional):",
+    storage_warning: "⚠ Auto-save isn't supported in this environment. Favorites and saved combinations only last for this session.",
+    tts_flag: "speech synthesis",
+    lang_btn: "中"
+  }
+};
+function t(key){ return I18N[LANG][key] || I18N.zh[key] || key; }
+function applyStaticI18n(){
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{
+    el.title = t(el.dataset.i18nTitle);
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{
+    el.dataset.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+  document.getElementById("btnDoubleSpeed").textContent = t(vowelDoubleSpeed ? "double_speed_on" : "double_speed_off");
+  document.getElementById("langToggle").textContent = t("lang_btn");
+  document.documentElement.lang = (LANG === "zh") ? "zh-Hant" : "en";
+}
+
 // ---------- DATA ----------
-const PLACES = ["雙唇\nBilabial","唇齒\nLabiodental","齒\nDental","齒齦\nAlveolar","後齒齦\nPost-alv.","捲舌\nRetroflex","硬顎\nPalatal","軟顎\nVelar","小舌\nUvular","咽\nPharyngeal","聲門\nGlottal"];
-const MANNERS = ["塞音 Plosive","鼻音 Nasal","顫音 Trill","閃音 Tap/Flap","擦音 Fricative","邊擦音 Lat. Fric.","近音 Approximant","邊近音 Lat. Approx."];
+const PLACES_ZH = ["雙唇 Bilabial","唇齒 Labiodental","齒 Dental","齒齦 Alveolar","後齒齦 Post-alv.","捲舌 Retroflex","硬顎 Palatal","軟顎 Velar","小舌 Uvular","咽 Pharyngeal","聲門 Glottal"];
+const PLACES_EN = ["Bilabial","Labiodental","Dental","Alveolar","Postalveolar","Retroflex","Palatal","Velar","Uvular","Pharyngeal","Glottal"];
+const MANNERS_ZH = ["塞音 Plosive","鼻音 Nasal","顫音 Trill","閃音 Tap/Flap","擦音 Fricative","邊擦音 Lat. Fric.","近音 Approximant","邊近音 Lat. Approx."];
+const MANNERS_EN = ["Plosive","Nasal","Trill","Tap/Flap","Fricative","Lat. Fric.","Approximant","Lat. Approx."];
+function PLACES(){ return LANG==="en" ? PLACES_EN : PLACES_ZH; }
+function MANNERS(){ return LANG==="en" ? MANNERS_EN : MANNERS_ZH; }
 
 // consonants: [symbol, placeIdx, mannerIdx, voiced(0/1), localFile(可能為null), name]
 const CONSONANTS = [
-  ["p",0,0,0,"U0070.mp3","無聲雙唇塞音"],
-  ["b",0,0,1,"U0062.mp3","有聲雙唇塞音"],
-  ["t",3,0,0,"U0074.mp3","無聲齒齦塞音"],
-  ["d",3,0,1,"U0064.mp3","有聲齒齦塞音"],
-  ["ʈ",5,0,0,"U0288.mp3","無聲捲舌塞音"],
-  ["ɖ",5,0,1,"U0256.mp3","有聲捲舌塞音"],
-  ["c",6,0,0,"U0063.mp3","無聲硬顎塞音"],
-  ["ɟ",6,0,1,"U025F.mp3","有聲硬顎塞音"],
-  ["k",7,0,0,"U006B.mp3","無聲軟顎塞音"],
-  ["ɡ",7,0,1,"U0261.mp3","有聲軟顎塞音"],
-  ["q",8,0,0,"U0071.mp3","無聲小舌塞音"],
-  ["ɢ",8,0,1,"U0262.mp3","有聲小舌塞音"],
-  ["ʔ",10,0,1,"U0294.mp3","聲門塞音"],
+  ["p",0,0,0,"U0070.mp3","無聲雙唇塞音","Voiceless bilabial plosive"],
+  ["b",0,0,1,"U0062.mp3","有聲雙唇塞音","Voiced bilabial plosive"],
+  ["t",3,0,0,"U0074.mp3","無聲齒齦塞音","Voiceless alveolar plosive"],
+  ["d",3,0,1,"U0064.mp3","有聲齒齦塞音","Voiced alveolar plosive"],
+  ["ʈ",5,0,0,"U0288.mp3","無聲捲舌塞音","Voiceless retroflex plosive"],
+  ["ɖ",5,0,1,"U0256.mp3","有聲捲舌塞音","Voiced retroflex plosive"],
+  ["c",6,0,0,"U0063.mp3","無聲硬顎塞音","Voiceless palatal plosive"],
+  ["ɟ",6,0,1,"U025F.mp3","有聲硬顎塞音","Voiced palatal plosive"],
+  ["k",7,0,0,"U006B.mp3","無聲軟顎塞音","Voiceless velar plosive"],
+  ["ɡ",7,0,1,"U0261.mp3","有聲軟顎塞音","Voiced velar plosive"],
+  ["q",8,0,0,"U0071.mp3","無聲小舌塞音","Voiceless uvular plosive"],
+  ["ɢ",8,0,1,"U0262.mp3","有聲小舌塞音","Voiced uvular plosive"],
+  ["ʔ",10,0,1,"U0294.mp3","聲門塞音","Glottal stop"],
 
-  ["m",0,1,1,"U006D.mp3","雙唇鼻音"],
-  ["ɱ",1,1,1,"U0271.mp3","唇齒鼻音"],
-  ["n",3,1,1,"U006E.mp3","齒齦鼻音"],
-  ["ɳ",5,1,1,"U0273.mp3","捲舌鼻音"],
-  ["ɲ",6,1,1,"U0272.mp3","硬顎鼻音"],
-  ["ŋ",7,1,1,"U014B.mp3","軟顎鼻音"],
-  ["ɴ",8,1,1,"U0274.mp3","小舌鼻音"],
+  ["m",0,1,1,"U006D.mp3","雙唇鼻音","Bilabial nasal"],
+  ["ɱ",1,1,1,"U0271.mp3","唇齒鼻音","Labiodental nasal"],
+  ["n",3,1,1,"U006E.mp3","齒齦鼻音","Alveolar nasal"],
+  ["ɳ",5,1,1,"U0273.mp3","捲舌鼻音","Retroflex nasal"],
+  ["ɲ",6,1,1,"U0272.mp3","硬顎鼻音","Palatal nasal"],
+  ["ŋ",7,1,1,"U014B.mp3","軟顎鼻音","Velar nasal"],
+  ["ɴ",8,1,1,"U0274.mp3","小舌鼻音","Uvular nasal"],
 
-  ["ʙ",0,2,1,"U0299.mp3","雙唇顫音"],
-  ["r",3,2,1,"U0072.mp3","齒齦顫音"],
-  ["ʀ",8,2,1,"U0280.mp3","小舌顫音"],
+  ["ʙ",0,2,1,"U0299.mp3","雙唇顫音","Bilabial trill"],
+  ["r",3,2,1,"U0072.mp3","齒齦顫音","Alveolar trill"],
+  ["ʀ",8,2,1,"U0280.mp3","小舌顫音","Uvular trill"],
 
-  ["ⱱ",1,3,1,"U2C71.mp3","唇齒閃音"],
-  ["ɾ",3,3,1,"U027E.mp3","齒齦閃音"],
-  ["ɽ",5,3,1,"U027D.mp3","捲舌閃音"],
+  ["ⱱ",1,3,1,"U2C71.mp3","唇齒閃音","Labiodental flap"],
+  ["ɾ",3,3,1,"U027E.mp3","齒齦閃音","Alveolar flap"],
+  ["ɽ",5,3,1,"U027D.mp3","捲舌閃音","Retroflex flap"],
 
-  ["ɸ",0,4,0,"U0278.mp3","無聲雙唇擦音"],
-  ["β",0,4,1,"U03B2.mp3","有聲雙唇擦音"],
-  ["f",1,4,0,"U0066.mp3","無聲唇齒擦音"],
-  ["v",1,4,1,"U0076.mp3","有聲唇齒擦音"],
-  ["θ",2,4,0,"U03B8.mp3","無聲齒擦音"],
-  ["ð",2,4,1,"U00F0.mp3","有聲齒擦音"],
-  ["s",3,4,0,"U0073.mp3","無聲齒齦擦音"],
-  ["z",3,4,1,"U007A.mp3","有聲齒齦擦音"],
-  ["ʃ",4,4,0,"U0283.mp3","無聲後齒齦擦音"],
-  ["ʒ",4,4,1,"U0292.mp3","有聲後齒齦擦音"],
-  ["ʂ",5,4,0,"U0282.mp3","無聲捲舌擦音"],
-  ["ʐ",5,4,1,"U0290.mp3","有聲捲舌擦音"],
-  ["ç",6,4,0,"U00E7.mp3","無聲硬顎擦音"],
-  ["ʝ",6,4,1,"U029D.mp3","有聲硬顎擦音"],
-  ["x",7,4,0,"U0078.mp3","無聲軟顎擦音"],
-  ["ɣ",7,4,1,"U0263.mp3","有聲軟顎擦音"],
-  ["χ",8,4,0,"U03C7.mp3","無聲小舌擦音"],
-  ["ʁ",8,4,1,"U0281.mp3","有聲小舌擦音"],
-  ["ħ",9,4,0,"U0127.mp3","無聲咽擦音"],
-  ["ʕ",9,4,1,"U0295.mp3","有聲咽擦音"],
-  ["h",10,4,0,"U0068.mp3","無聲聲門擦音"],
-  ["ɦ",10,4,1,"U0266.mp3","有聲聲門擦音"],
+  ["ɸ",0,4,0,"U0278.mp3","無聲雙唇擦音","Voiceless bilabial fricative"],
+  ["β",0,4,1,"U03B2.mp3","有聲雙唇擦音","Voiced bilabial fricative"],
+  ["f",1,4,0,"U0066.mp3","無聲唇齒擦音","Voiceless labiodental fricative"],
+  ["v",1,4,1,"U0076.mp3","有聲唇齒擦音","Voiced labiodental fricative"],
+  ["θ",2,4,0,"U03B8.mp3","無聲齒擦音","Voiceless dental fricative"],
+  ["ð",2,4,1,"U00F0.mp3","有聲齒擦音","Voiced dental fricative"],
+  ["s",3,4,0,"U0073.mp3","無聲齒齦擦音","Voiceless alveolar fricative"],
+  ["z",3,4,1,"U007A.mp3","有聲齒齦擦音","Voiced alveolar fricative"],
+  ["ʃ",4,4,0,"U0283.mp3","無聲後齒齦擦音","Voiceless postalveolar fricative"],
+  ["ʒ",4,4,1,"U0292.mp3","有聲後齒齦擦音","Voiced postalveolar fricative"],
+  ["ʂ",5,4,0,"U0282.mp3","無聲捲舌擦音","Voiceless retroflex fricative"],
+  ["ʐ",5,4,1,"U0290.mp3","有聲捲舌擦音","Voiced retroflex fricative"],
+  ["ç",6,4,0,"U00E7.mp3","無聲硬顎擦音","Voiceless palatal fricative"],
+  ["ʝ",6,4,1,"U029D.mp3","有聲硬顎擦音","Voiced palatal fricative"],
+  ["x",7,4,0,"U0078.mp3","無聲軟顎擦音","Voiceless velar fricative"],
+  ["ɣ",7,4,1,"U0263.mp3","有聲軟顎擦音","Voiced velar fricative"],
+  ["χ",8,4,0,"U03C7.mp3","無聲小舌擦音","Voiceless uvular fricative"],
+  ["ʁ",8,4,1,"U0281.mp3","有聲小舌擦音","Voiced uvular fricative"],
+  ["ħ",9,4,0,"U0127.mp3","無聲咽擦音","Voiceless pharyngeal fricative"],
+  ["ʕ",9,4,1,"U0295.mp3","有聲咽擦音","Voiced pharyngeal fricative"],
+  ["h",10,4,0,"U0068.mp3","無聲聲門擦音","Voiceless glottal fricative"],
+  ["ɦ",10,4,1,"U0266.mp3","有聲聲門擦音","Voiced glottal fricative"],
 
-  ["ɬ",3,5,0,"U026C.mp3","無聲齒齦邊擦音"],
-  ["ɮ",3,5,1,"U026E.mp3","有聲齒齦邊擦音"],
+  ["ɬ",3,5,0,"U026C.mp3","無聲齒齦邊擦音","Voiceless alveolar lateral fricative"],
+  ["ɮ",3,5,1,"U026E.mp3","有聲齒齦邊擦音","Voiced alveolar lateral fricative"],
 
-  ["ʋ",1,6,1,"U028B.mp3","唇齒近音"],
-  ["ɹ",3,6,1,"U0279.mp3","齒齦近音"],
-  ["ɻ",5,6,1,"U027B.mp3","捲舌近音"],
-  ["j",6,6,1,"U006A.mp3","硬顎近音"],
-  ["ɰ",7,6,1,"U0270.mp3","軟顎近音"],
+  ["ʋ",1,6,1,"U028B.mp3","唇齒近音","Labiodental approximant"],
+  ["ɹ",3,6,1,"U0279.mp3","齒齦近音","Alveolar approximant"],
+  ["ɻ",5,6,1,"U027B.mp3","捲舌近音","Retroflex approximant"],
+  ["j",6,6,1,"U006A.mp3","硬顎近音","Palatal approximant"],
+  ["ɰ",7,6,1,"U0270.mp3","軟顎近音","Velar approximant"],
 
-  ["l",3,7,1,"U006C.mp3","齒齦邊近音"],
-  ["ɭ",5,7,1,"U026D.mp3","捲舌邊近音"],
-  ["ʎ",6,7,1,"U028E.mp3","硬顎邊近音"],
-  ["ʟ",7,7,1,"U029F.mp3","軟顎邊近音"]
+  ["l",3,7,1,"U006C.mp3","齒齦邊近音","Alveolar lateral approximant"],
+  ["ɭ",5,7,1,"U026D.mp3","捲舌邊近音","Retroflex lateral approximant"],
+  ["ʎ",6,7,1,"U028E.mp3","硬顎邊近音","Palatal lateral approximant"],
+  ["ʟ",7,7,1,"U029F.mp3","軟顎邊近音","Velar lateral approximant"],
 ];
 
-const VOWEL_HEIGHTS = ["高 Close","次高 Near-close","中高 Close-mid","中 Mid","中低 Open-mid","次低 Near-open","低 Open"];
-const VOWEL_BACKS = ["前 Front","央 Central","後 Back"];
+const VOWEL_HEIGHTS_ZH = ["高 Close","次高 Near-close","中高 Close-mid","中 Mid","中低 Open-mid","次低 Near-open","低 Open"];
+const VOWEL_HEIGHTS_EN = ["Close","Near-close","Close-mid","Mid","Open-mid","Near-open","Open"];
+const VOWEL_BACKS_ZH = ["前 Front","央 Central","後 Back"];
+const VOWEL_BACKS_EN = ["Front","Central","Back"];
+function VOWEL_HEIGHTS(){ return LANG==="en" ? VOWEL_HEIGHTS_EN : VOWEL_HEIGHTS_ZH; }
+function VOWEL_BACKS(){ return LANG==="en" ? VOWEL_BACKS_EN : VOWEL_BACKS_ZH; }
 // [symbol, heightIdx, backIdx, rounded(0/1), localFile(可能為null), name]
 const VOWELS = [
-  ["i",0,0,0,"U0069.mp3","前高不圓唇母音"],
-  ["y",0,0,1,"U0079.mp3","前高圓唇母音"],
-  ["ɨ",0,1,0,"U0268.mp3","央高不圓唇母音"],
-  ["ʉ",0,1,1,"U0289.mp3","央高圓唇母音"],
-  ["ɯ",0,2,0,"U026F.mp3","後高不圓唇母音"],
-  ["u",0,2,1,"U0075.mp3","後高圓唇母音"],
+  ["i",0,0,0,"U0069.mp3","前高不圓唇母音","Close front unrounded vowel"],
+  ["y",0,0,1,"U0079.mp3","前高圓唇母音","Close front rounded vowel"],
+  ["ɨ",0,1,0,"U0268.mp3","央高不圓唇母音","Close central unrounded vowel"],
+  ["ʉ",0,1,1,"U0289.mp3","央高圓唇母音","Close central rounded vowel"],
+  ["ɯ",0,2,0,"U026F.mp3","後高不圓唇母音","Close back unrounded vowel"],
+  ["u",0,2,1,"U0075.mp3","後高圓唇母音","Close back rounded vowel"],
 
-  ["ɪ",1,0,0,"U026A.mp3","次前次高不圓唇母音"],
-  ["ʏ",1,0,1,"U028F.mp3","次前次高圓唇母音"],
-  ["ʊ",1,2,1,"U028A.mp3","次後次高圓唇母音"],
+  ["ɪ",1,0,0,"U026A.mp3","次前次高不圓唇母音","Near-close near-front unrounded vowel"],
+  ["ʏ",1,0,1,"U028F.mp3","次前次高圓唇母音","Near-close near-front rounded vowel"],
+  ["ʊ",1,2,1,"U028A.mp3","次後次高圓唇母音","Near-close near-back rounded vowel"],
 
-  ["e",2,0,0,"U0065.mp3","前中高不圓唇母音"],
-  ["ø",2,0,1,"U00F8.mp3","前中高圓唇母音"],
-  ["ɘ",2,1,0,"U0258.mp3","央中高不圓唇母音"],
-  ["ɵ",2,1,1,"U0275.mp3","央中高圓唇母音"],
-  ["ɤ",2,2,0,"U0264.mp3","後中高不圓唇母音"],
-  ["o",2,2,1,"U006F.mp3","後中高圓唇母音"],
+  ["e",2,0,0,"U0065.mp3","前中高不圓唇母音","Close-mid front unrounded vowel"],
+  ["ø",2,0,1,"U00F8.mp3","前中高圓唇母音","Close-mid front rounded vowel"],
+  ["ɘ",2,1,0,"U0258.mp3","央中高不圓唇母音","Close-mid central unrounded vowel"],
+  ["ɵ",2,1,1,"U0275.mp3","央中高圓唇母音","Close-mid central rounded vowel"],
+  ["ɤ",2,2,0,"U0264.mp3","後中高不圓唇母音","Close-mid back unrounded vowel"],
+  ["o",2,2,1,"U006F.mp3","後中高圓唇母音","Close-mid back rounded vowel"],
 
-  ["ə",3,1,0,"U0259.mp3","中央母音"],
+  ["ə",3,1,0,"U0259.mp3","中央母音","Mid central vowel"],
 
-  ["ɛ",4,0,0,"U025B.mp3","前中低不圓唇母音"],
-  ["œ",4,0,1,"U0153.mp3","前中低圓唇母音"],
-  ["ɜ",4,1,0,"U025C.mp3","央中低不圓唇母音"],
-  ["ɞ",4,1,1,"U025E.mp3","央中低圓唇母音"],
-  ["ʌ",4,2,0,"U028C.mp3","後中低不圓唇母音"],
-  ["ɔ",4,2,1,"U0254.mp3","後中低圓唇母音"],
+  ["ɛ",4,0,0,"U025B.mp3","前中低不圓唇母音","Open-mid front unrounded vowel"],
+  ["œ",4,0,1,"U0153.mp3","前中低圓唇母音","Open-mid front rounded vowel"],
+  ["ɜ",4,1,0,"U025C.mp3","央中低不圓唇母音","Open-mid central unrounded vowel"],
+  ["ɞ",4,1,1,"U025E.mp3","央中低圓唇母音","Open-mid central rounded vowel"],
+  ["ʌ",4,2,0,"U028C.mp3","後中低不圓唇母音","Open-mid back unrounded vowel"],
+  ["ɔ",4,2,1,"U0254.mp3","後中低圓唇母音","Open-mid back rounded vowel"],
 
-  ["æ",5,0,0,"U00E6.mp3","次前次低不圓唇母音"],
-  ["ɐ",5,1,0,"U0250.mp3","次央次低母音"],
+  ["æ",5,0,0,"U00E6.mp3","次前次低不圓唇母音","Near-open front unrounded vowel"],
+  ["ɐ",5,1,0,"U0250.mp3","次央次低母音","Near-open central vowel"],
 
-  ["a",6,0,0,"U0061.mp3","前低不圓唇母音"],
-  ["ɶ",6,0,1,"U0276.mp3","前低圓唇母音"],
-  ["ɑ",6,2,0,"U0251.mp3","後低不圓唇母音"],
-  ["ɒ",6,2,1,"U0252.mp3","後低圓唇母音"]
+  ["a",6,0,0,"U0061.mp3","前低不圓唇母音","Open front unrounded vowel"],
+  ["ɶ",6,0,1,"U0276.mp3","前低圓唇母音","Open front rounded vowel"],
+  ["ɑ",6,2,0,"U0251.mp3","後低不圓唇母音","Open back unrounded vowel"],
+  ["ɒ",6,2,1,"U0252.mp3","後低圓唇母音","Open back rounded vowel"],
 ];
 
 // [symbol, localFile, name]
 const OTHERS = [
-  ["ʍ","U028D.mp3","無聲唇軟顎擦音"],
-  ["w","U0077.mp3","有聲唇軟顎近音"],
-  ["ɥ","U0265.mp3","有聲唇硬顎近音"],
-  ["ʜ","U029C.mp3","無聲會厭顫音"],
-  ["ʢ","U02A2.mp3","有聲會厭顫音"],
-  ["ʡ","U02A1.mp3","會厭塞音"],
-  ["ɕ","U0255.mp3","無聲齦顎擦音"],
-  ["ʑ","U0291.mp3","有聲齦顎擦音"],
-  ["ɺ","U027A.mp3","齒齦邊閃音"],
-  ["ɧ","U0267.mp3","無聲後齒齦軟顎擦音"]
+  ["ʍ","U028D.mp3","無聲唇軟顎擦音","Voiceless labial-velar fricative"],
+  ["w","U0077.mp3","有聲唇軟顎近音","Voiced labial-velar approximant"],
+  ["ɥ","U0265.mp3","有聲唇硬顎近音","Voiced labial-palatal approximant"],
+  ["ʜ","U029C.mp3","無聲會厭顫音","Voiceless epiglottal trill"],
+  ["ʢ","U02A2.mp3","有聲會厭顫音","Voiced epiglottal trill"],
+  ["ʡ","U02A1.mp3","會厭塞音","Epiglottal stop"],
+  ["ɕ","U0255.mp3","無聲齦顎擦音","Voiceless alveolo-palatal fricative"],
+  ["ʑ","U0291.mp3","有聲齦顎擦音","Voiced alveolo-palatal fricative"],
+  ["ɺ","U027A.mp3","齒齦邊閃音","Alveolar lateral flap"],
+  ["ɧ","U0267.mp3","無聲後齒齦軟顎擦音","Voiceless postalveolar-velar fricative"],
 ];
 
 // 塞擦音：[symbol, localFile, name]
 const AFFRICATES = [
-  ["t͡s","U0074_0361_0073.mp3","無聲齒齦塞擦音"],
-  ["d͡z","U0064_0361_007A.mp3","有聲齒齦塞擦音"],
-  ["t͡ʃ","U0074_0361_0283.mp3","無聲後齒齦塞擦音"],
-  ["d͡ʒ","U0064_0361_0292.mp3","有聲後齒齦塞擦音"],
-  ["t͡ɕ","U0074_0361_0255.mp3","無聲齦顎塞擦音"],
-  ["d͡ʑ","U0064_0361_0291.mp3","有聲齦顎塞擦音"],
-  ["ʈ͡ʂ","U0288_0361_0282.mp3","無聲捲舌塞擦音"],
-  ["ɖ͡ʐ","U0256_0361_0290.mp3","有聲捲舌塞擦音"]
+  ["t͡s","U0074_0361_0073.mp3","無聲齒齦塞擦音","Voiceless alveolar affricate"],
+  ["d͡z","U0064_0361_007A.mp3","有聲齒齦塞擦音","Voiced alveolar affricate"],
+  ["t͡ʃ","U0074_0361_0283.mp3","無聲後齒齦塞擦音","Voiceless postalveolar affricate"],
+  ["d͡ʒ","U0064_0361_0292.mp3","有聲後齒齦塞擦音","Voiced postalveolar affricate"],
+  ["t͡ɕ","U0074_0361_0255.mp3","無聲齦顎塞擦音","Voiceless alveolo-palatal affricate"],
+  ["d͡ʑ","U0064_0361_0291.mp3","有聲齦顎塞擦音","Voiced alveolo-palatal affricate"],
+  ["ʈ͡ʂ","U0288_0361_0282.mp3","無聲捲舌塞擦音","Voiceless retroflex affricate"],
+  ["ɖ͡ʐ","U0256_0361_0290.mp3","有聲捲舌塞擦音","Voiced retroflex affricate"],
 ];
 
 // 非肺部氣流音：[symbol, localFile, name]
 const CLICKS = [
-  ["ʘ","U0298.mp3","雙唇搭嘴音"],
-  ["ǀ","U01C0.mp3","齒搭嘴音"],
-  ["ǃ","U01C3.mp3","（後）齒齦搭嘴音"],
-  ["ǂ","U01C2.mp3","齦顎搭嘴音"],
-  ["ǁ","U01C1.mp3","齒齦邊搭嘴音"]
+  ["ʘ","U0298.mp3","雙唇搭嘴音","Bilabial click"],
+  ["ǀ","U01C0.mp3","齒搭嘴音","Dental click"],
+  ["ǃ","U01C3.mp3","（後）齒齦搭嘴音","(Post)alveolar click"],
+  ["ǂ","U01C2.mp3","齦顎搭嘴音","Palatoalveolar click"],
+  ["ǁ","U01C1.mp3","齒齦邊搭嘴音","Alveolar lateral click"],
 ];
 const IMPLOSIVES = [
-  ["ɓ","U0253.mp3","雙唇內爆音"],
-  ["ɗ","U0257.mp3","齒／齒齦內爆音"],
-  ["ʄ","U0284.mp3","硬顎內爆音"],
-  ["ɠ","U0260.mp3","軟顎內爆音"],
-  ["ʛ","U029B.mp3","小舌內爆音"]
+  ["ɓ","U0253.mp3","雙唇內爆音","Bilabial implosive"],
+  ["ɗ","U0257.mp3","齒／齒齦內爆音","Dental/alveolar implosive"],
+  ["ʄ","U0284.mp3","硬顎內爆音","Palatal implosive"],
+  ["ɠ","U0260.mp3","軟顎內爆音","Velar implosive"],
+  ["ʛ","U029B.mp3","小舌內爆音","Uvular implosive"],
 ];
 const EJECTIVES = [
-  ["pʼ","U0070_02BC.mp3","雙唇擠喉音"],
-  ["tʼ","U0074_02BC.mp3","齒齦擠喉音"],
-  ["kʼ","U006B_02BC.mp3","軟顎擠喉音"],
-  ["sʼ","U0073_02BC.mp3","齒齦擦音擠喉音"]
+  ["pʼ","U0070_02BC.mp3","雙唇擠喉音","Bilabial ejective"],
+  ["tʼ","U0074_02BC.mp3","齒齦擠喉音","Alveolar ejective"],
+  ["kʼ","U006B_02BC.mp3","軟顎擠喉音","Velar ejective"],
+  ["sʼ","U0073_02BC.mp3","齒齦擦音擠喉音","Alveolar fricative ejective"],
 ];
 
 // ---------- STORAGE (with graceful fallback) ----------
@@ -634,7 +753,7 @@ async function playEntry(entry){
     if(ok) return;
   }
   // 沒有可用音檔，才退回語音合成
-  speakFallback(entry.name);
+  speakFallback((LANG==="en" ? entry.nameEn : entry.name) || entry.name);
   markTTS(entry.symbol);
   await new Promise(r=>setTimeout(r, 900));
 }
@@ -645,7 +764,7 @@ function markTTS(symbol){
   document.querySelectorAll(`.phon-btn[data-symbol="${cssEscape(symbol)}"]`).forEach(btn=>{
     if(!btn.querySelector(".tts-flag")){
       const f = document.createElement("span");
-      f.className="tts-flag"; f.textContent="語音合成";
+      f.className="tts-flag"; f.textContent=t("tts_flag");
       btn.appendChild(f);
     }
   });
@@ -654,13 +773,13 @@ function cssEscape(s){ return s.replace(/[^a-zA-Z0-9_-]/g, c => "\\"+c); }
 
 // ---------- BUILD LOOKUP ----------
 const ALL_ENTRIES = {}; // symbol -> {symbol,file,name,category}
-CONSONANTS.forEach(([s,,, ,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"consonant"});
-VOWELS.forEach(([s,,, ,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"vowel"});
-OTHERS.forEach(([s,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"other"});
-AFFRICATES.forEach(([s,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"other"});
-CLICKS.forEach(([s,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"other"});
-IMPLOSIVES.forEach(([s,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"other"});
-EJECTIVES.forEach(([s,f,n])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,category:"other"});
+CONSONANTS.forEach(([s,,, ,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"consonant"});
+VOWELS.forEach(([s,,, ,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"vowel"});
+OTHERS.forEach(([s,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"other"});
+AFFRICATES.forEach(([s,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"other"});
+CLICKS.forEach(([s,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"other"});
+IMPLOSIVES.forEach(([s,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"other"});
+EJECTIVES.forEach(([s,f,n,ne])=> ALL_ENTRIES[s]={symbol:s,file:f,name:n,nameEn:ne,category:"other"});
 
 // ---------- RENDER GRIDS ----------
 function makeBtn(symbol, category){
@@ -668,7 +787,7 @@ function makeBtn(symbol, category){
   btn.className = "phon-btn " + category;
   btn.dataset.symbol = symbol;
   btn.textContent = symbol;
-  btn.title = ALL_ENTRIES[symbol].name;
+  btn.title = (LANG === "en" ? ALL_ENTRIES[symbol].nameEn : ALL_ENTRIES[symbol].name) || ALL_ENTRIES[symbol].name;
 
   const entryFile = ALL_ENTRIES[symbol].file;
   if(typeof entryFile === "string" && entryFile.startsWith("wiki:")){
@@ -695,31 +814,32 @@ function makeBtn(symbol, category){
 function renderConsonantGrid(){
   const grid = document.getElementById("consonant-grid");
   grid.innerHTML = "";
-  grid.style.gridTemplateColumns = `120px repeat(${PLACES.length*2}, minmax(30px,1fr))`;
-  grid.style.gridTemplateRows = `36px repeat(${MANNERS.length}, 46px)`;
+  const places = PLACES();
+  const manners = MANNERS();
+  grid.style.gridTemplateColumns = `120px repeat(${places.length*2}, minmax(30px,1fr))`;
+  grid.style.gridTemplateRows = `36px repeat(${manners.length}, 46px)`;
 
   const corner = document.createElement("div");
   corner.style.gridColumn="1"; corner.style.gridRow="1";
   grid.appendChild(corner);
 
-  PLACES.forEach((p,i)=>{
+  places.forEach((p,i)=>{
     const head = document.createElement("div");
     head.className="g-head";
     head.style.gridColumn = `${2+i*2} / span 2`;
     head.style.gridRow = "1";
-    head.textContent = p.split("\n")[0];
-    head.title = p.split("\n")[1]||"";
+    head.textContent = p;
     grid.appendChild(head);
   });
 
-  MANNERS.forEach((m,r)=>{
+  manners.forEach((m,r)=>{
     const label = document.createElement("div");
     label.className="g-row-label";
     label.style.gridColumn="1"; label.style.gridRow = 2+r;
     label.textContent = m;
     grid.appendChild(label);
 
-    for(let p=0;p<PLACES.length;p++){
+    for(let p=0;p<places.length;p++){
       for(let v=0; v<2; v++){
         const col = 2+p*2+v;
         const found = CONSONANTS.find(c=>c[1]===p && c[2]===r && c[3]===v);
@@ -739,14 +859,16 @@ function renderConsonantGrid(){
 function renderVowelGrid(){
   const grid = document.getElementById("vowel-grid");
   grid.innerHTML = "";
-  grid.style.gridTemplateColumns = `140px repeat(${VOWEL_BACKS.length*2}, minmax(60px,1fr))`;
-  grid.style.gridTemplateRows = `36px repeat(${VOWEL_HEIGHTS.length}, 46px)`;
+  const backs = VOWEL_BACKS();
+  const heights = VOWEL_HEIGHTS();
+  grid.style.gridTemplateColumns = `140px repeat(${backs.length*2}, minmax(60px,1fr))`;
+  grid.style.gridTemplateRows = `36px repeat(${heights.length}, 46px)`;
 
   const corner = document.createElement("div");
   corner.style.gridColumn="1"; corner.style.gridRow="1";
   grid.appendChild(corner);
 
-  VOWEL_BACKS.forEach((b,i)=>{
+  backs.forEach((b,i)=>{
     const head = document.createElement("div");
     head.className="g-head";
     head.style.gridColumn = `${2+i*2} / span 2`;
@@ -755,14 +877,14 @@ function renderVowelGrid(){
     grid.appendChild(head);
   });
 
-  VOWEL_HEIGHTS.forEach((h,r)=>{
+  heights.forEach((h,r)=>{
     const label = document.createElement("div");
     label.className="g-row-label";
     label.style.gridColumn="1"; label.style.gridRow=2+r;
     label.textContent = h;
     grid.appendChild(label);
 
-    for(let b=0;b<VOWEL_BACKS.length;b++){
+    for(let b=0;b<backs.length;b++){
       for(let rd=0; rd<2; rd++){
         const col = 2+b*2+rd;
         const found = VOWELS.find(v=>v[1]===r && v[2]===b && v[3]===rd);
@@ -830,7 +952,7 @@ function renderBuilder(){
     chip.appendChild(t);
     const rm = document.createElement("button");
     rm.textContent="✕";
-    rm.title="移除";
+    rm.title = (LANG === "en") ? "Remove" : "移除";
     rm.addEventListener("click",(e)=>{ e.stopPropagation(); builder.splice(i,1); renderBuilder(); });
     chip.appendChild(rm);
     strip.appendChild(chip);
@@ -890,7 +1012,7 @@ async function playCombo(list){
       const waitMs = Math.max(0, (when - ctx.currentTime) * 1000);
       if(waitMs>0) await sleep(waitMs);
       btns.forEach(b=>b.classList.add("playing"));
-      speakFallback(entry.name);
+      speakFallback((LANG==="en" ? entry.nameEn : entry.name) || entry.name);
       markTTS(entry.symbol);
       await sleep(900);
       btns.forEach(b=>b.classList.remove("playing"));
@@ -906,7 +1028,7 @@ function renderSavedPanel(){
   document.getElementById("savedCount").textContent = `(${savedCombos.length}/20)`;
   panel.innerHTML = "";
   if(savedCombos.length===0){
-    panel.innerHTML = `<div class="empty-msg">尚未儲存任何組合。在上方組合好音標後，點「＋ 存入暫存區」即可保存，最多 20 組。</div>`;
+    panel.innerHTML = `<div class="empty-msg">${t("saved_empty")}</div>`;
     return;
   }
   savedCombos.forEach((combo, i)=>{
@@ -918,13 +1040,13 @@ function renderSavedPanel(){
       <span class="label-txt">${combo.name||""}</span>
     `;
     const playBtn = document.createElement("button");
-    playBtn.className="mini-btn"; playBtn.textContent="▶ 播放";
+    playBtn.className="mini-btn"; playBtn.textContent=t("btn_play");
     playBtn.addEventListener("click", ()=> playCombo(combo.symbols));
     const loadBtn = document.createElement("button");
-    loadBtn.className="mini-btn"; loadBtn.textContent="載入編輯";
+    loadBtn.className="mini-btn"; loadBtn.textContent=t("btn_load");
     loadBtn.addEventListener("click", ()=>{ builder = [...combo.symbols]; renderBuilder(); });
     const delBtn = document.createElement("button");
-    delBtn.className="mini-btn"; delBtn.textContent="刪除";
+    delBtn.className="mini-btn"; delBtn.textContent=t("btn_delete");
     delBtn.addEventListener("click", async ()=>{
       savedCombos.splice(i,1);
       await storeSet("ipa:saved-combos", JSON.stringify(savedCombos));
@@ -940,7 +1062,7 @@ function renderFavPanel(){
   document.getElementById("favCount").textContent = `(${favorites.length})`;
   panel.innerHTML = "";
   if(favorites.length===0){
-    panel.innerHTML = `<div class="empty-msg">尚未收藏任何音素。點卡片右上角的星號即可收藏。</div>`;
+    panel.innerHTML = `<div class="empty-msg">${t("fav_empty")}</div>`;
     return;
   }
   favorites.forEach(s=>{
@@ -984,8 +1106,23 @@ document.getElementById("favOnly").addEventListener("change", applyFavFilter);
 document.getElementById("btnDoubleSpeed").addEventListener("click", ()=>{
   vowelDoubleSpeed = !vowelDoubleSpeed;
   const btn = document.getElementById("btnDoubleSpeed");
-  btn.textContent = "⏩ 兩倍速播放（不變調）：" + (vowelDoubleSpeed ? "開啟" : "關閉");
+  btn.textContent = t(vowelDoubleSpeed ? "double_speed_on" : "double_speed_off");
   btn.classList.toggle("primary", vowelDoubleSpeed);
+});
+document.getElementById("langToggle").addEventListener("click", ()=>{
+  LANG = (LANG === "zh") ? "en" : "zh";
+  applyStaticI18n();
+  renderConsonantGrid();
+  renderVowelGrid();
+  renderOtherGrid();
+  renderSimpleGrid("affricate-grid", AFFRICATES);
+  renderSimpleGrid("click-grid", CLICKS);
+  renderSimpleGrid("implosive-grid", IMPLOSIVES);
+  renderSimpleGrid("ejective-grid", EJECTIVES);
+  refreshStars();
+  applyFavFilter();
+  renderSavedPanel();
+  renderFavPanel();
 });
 
 document.querySelectorAll(".ws-mini-tab").forEach(t=>{
@@ -1003,9 +1140,9 @@ document.getElementById("btnClear").addEventListener("click", ()=>{ builder=[]; 
 document.getElementById("btnPlayCombo").addEventListener("click", ()=>{ if(builder.length) playCombo(builder); });
 document.getElementById("builderStrip").addEventListener("click", ()=>{ if(builder.length) playCombo(builder); });
 document.getElementById("btnSaveCombo").addEventListener("click", async ()=>{
-  if(builder.length===0){ alert("組合工作區是空的，請先點選音標卡片。"); return; }
-  if(savedCombos.length>=20){ alert("暫存區已滿（20/20），請先刪除一組再儲存。"); return; }
-  const name = prompt("為這組發音組合命名（可留空）：","") || "";
+  if(builder.length===0){ alert(t("alert_builder_empty")); return; }
+  if(savedCombos.length>=20){ alert(t("alert_saved_full")); return; }
+  const name = prompt(t("prompt_name"),"") || "";
   savedCombos.push({symbols:[...builder], name, ts:Date.now()});
   await storeSet("ipa:saved-combos", JSON.stringify(savedCombos));
   renderSavedPanel();
@@ -1013,6 +1150,7 @@ document.getElementById("btnSaveCombo").addEventListener("click", async ()=>{
 
 // ---------- INIT ----------
 async function init(){
+  applyStaticI18n();
   renderConsonantGrid();
   renderVowelGrid();
   renderOtherGrid();
@@ -1034,7 +1172,7 @@ async function init(){
   if(!storageAvailable){
     const note = document.createElement("p");
     note.style.cssText="font-size:11px;color:var(--danger);margin-top:6px;";
-    note.textContent = "⚠ 目前環境不支援自動儲存，收藏與暫存區僅在本次瀏覽期間有效。";
+    note.textContent = t("storage_warning");
     document.querySelector(".ws-inner").appendChild(note);
   }
 }
