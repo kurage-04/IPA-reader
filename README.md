@@ -1,2 +1,2 @@
-an IPA-reader for conlanger/ learning new language.
+An IPA-reader for conlanger/ learning new langnages.
 finished with claude code
